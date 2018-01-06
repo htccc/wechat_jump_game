@@ -139,11 +139,11 @@ def find_piece_and_board(im):
 # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
 
 def jump(piece_x,board_x,im,swipe_x1,swipe_y1):
-	distanceX = abs(board_x-piece_x)
-	shortEdge = min(im.size)
-	jumpPercent = distanceX/shortEdge
+	distanceX = abs(board_x-piece_x) #起点到目标的水平距离
+	shortEdge = min(im.size) #屏幕宽度
+	jumpPercent = distanceX/shortEdge #跳跃百分比
 	jumpFullWidth = 1700 #跳过整个宽度 需要按压的毫秒数
-	press_time = round(jumpPercent*jumpFullWidth)
+	press_time = round(jumpFullWidth*jumpPercent) #按压时长
 	press_time = 0 if not press_time else max(press_time,200) #press_time大于0时限定最小值
 	print('%-12s %.2f%% (%s/%s) | Press: %sms'%('Distance:',jumpPercent*100,distanceX,shortEdge,press_time))
 

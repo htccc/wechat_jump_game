@@ -38,6 +38,14 @@
 - 从跳跃的像素距离，转化为需要跳跃的x轴距离占ui宽度的比例。
 - 按压时间 = 跳全屏宽度需要的时间 × (起点和目标的横向距离 / 屏幕宽度)
 
+```
+    distanceX = abs(board_x-piece_x) #起点到目标的水平距离
+    shortEdge = min(im.size) #屏幕宽度
+    jumpPercent = distanceX/shortEdge #跳跃百分比
+    jumpFullWidth = 1700 #跳过整个宽度 需要按压的毫秒数
+    press_time = round(jumpFullWidth*jumpPercent) #按压时长
+```
+
 > 优点：省略了所有y轴的取值，并且自适应所有设备。（实测 4:3/16:9/2:1都成功。原方案的所有配置文件都不需要了。）  
 
 ---
