@@ -8,7 +8,7 @@ __author__ = 'Erimus'
 可以防止被ban(从抓包数据看没有返回Error)。
 '''
 
-import os,sys,subprocess,time,math,random
+import os,sys,subprocess,time,random
 from PIL import Image,ImageDraw
 from io import BytesIO
 
