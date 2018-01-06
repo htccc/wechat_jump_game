@@ -46,28 +46,6 @@ def pull_screenshot():
 
 # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
 
-# 重设点击位置 再来一局位置
-# 其实这个界面，应该是标准的9:16，然后fit当前窗体(600:800测试结果)。长窄屏已经特殊处理。
-def set_button_position(im,gameover=0):
-	w, h = im.size
-	if h//16>w//9+2: #长窄屏 2px容差 获取ui描绘的高度
-		uih = int(w/9*16)
-	else:
-		uih = h
-	uiw = int(uih/16*9)
-
-	# 如果游戏结束 点击再来一局
-	left = int(w/2) #按钮半宽约uiw//5
-	top = int((h-uih)/2+uih*0.825) #根据9:16实测按钮高度中心0.825 按钮半高约uiw//28
-	if gameover: return left,top
-
-	# 游戏中点击 随机位置防 ban
-	left = random.randint(w//4,w) #避开左下角按钮
-	top = random.randint(h*3//4,h)
-	return left, top
-
-# ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
-
 # 寻找起点和终点坐标
 def find_piece_and_board(im):
 	w, h = im.size #图片宽高
@@ -138,6 +116,28 @@ def find_piece_and_board(im):
 
 # ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
 
+# 重设点击位置 再来一局位置
+# 其实这个界面，应该是标准的9:16，然后fit当前窗体(600:800测试结果)。长窄屏已经特殊处理。
+def set_button_position(im,gameover=0):
+	w, h = im.size
+	if h//16>w//9+2: #长窄屏 2px容差 获取ui描绘的高度
+		uih = int(w/9*16)
+	else:
+		uih = h
+	uiw = int(uih/16*9)
+
+	# 如果游戏结束 点击再来一局
+	left = int(w/2) #按钮半宽约uiw//5
+	top = int((h-uih)/2+uih*0.825) #根据9:16实测按钮高度中心0.825 按钮半高约uiw//28
+	if gameover: return left,top
+
+	# 游戏中点击 随机位置防 ban
+	left = random.randint(w//4,w-20) #避开左下角按钮
+	top = random.randint(h*3//4,h-20)
+	return left, top
+
+# ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+
 def jump(piece_x,board_x,im,swipe_x1,swipe_y1):
 	distanceX = abs(board_x-piece_x) #起点到目标的水平距离
 	shortEdge = min(im.size) #屏幕宽度
@@ -150,7 +150,7 @@ def jump(piece_x,board_x,im,swipe_x1,swipe_y1):
 	cmd = 'adb shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(
 		x1 = swipe_x1,
 		y1 = swipe_y1,
-		x2 = swipe_x1+random.randint(-10,10),
+		x2 = swipe_x1+random.randint(-10,10), #模拟位移
 		y2 = swipe_y1+random.randint(-10,10),
 		duration = press_time
 	)
