@@ -142,15 +142,15 @@ def jump(piece_x,board_x,im,swipe_x1,swipe_y1):
 	distanceX = abs(board_x-piece_x) #起点到目标的水平距离
 	shortEdge = min(im.size) #屏幕宽度
 	jumpPercent = distanceX/shortEdge #跳跃百分比
-	jumpFullWidth = 1700 #跳过整个宽度 需要按压的毫秒数
-	press_time = round(jumpFullWidth*jumpPercent) #按压时长
+	jumpFullWidth = 1750 #跳过整个宽度 需要按压的毫秒数
+	press_time = round(jumpFullWidth*jumpPercent+20) #按压时长
 	press_time = 0 if not press_time else max(press_time,200) #press_time大于0时限定最小值
 	print('%-12s %.2f%% (%s/%s) | Press: %sms'%('Distance:',jumpPercent*100,distanceX,shortEdge,press_time))
 
 	cmd = 'adb shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(
 		x1 = swipe_x1,
 		y1 = swipe_y1,
-		x2 = swipe_x1+random.randint(-10,10), #模拟位移
+		x2 = swipe_x1+random.randint(-10,5), #模拟位移
 		y2 = swipe_y1+random.randint(-10,10),
 		duration = press_time
 	)
@@ -177,7 +177,7 @@ def main():
 		# 获取棋子和 board 的位置
 		piece_x, board_x = find_piece_and_board(im)
 		gameover = 0 if all((piece_x,board_x)) else 1
-		swipe_x1,swipe_y1 = set_button_position(im,gameover=gameover) #随机点击位置
+		swipe_x1,swipe_y1 = set_button_position(im,gameover=gameover+1) #随机点击位置
 
 		# 标注截图并显示
 		# draw = ImageDraw.Draw(im)
@@ -188,7 +188,7 @@ def main():
 
 		jump(piece_x,board_x,im,swipe_x1,swipe_y1)
 
-		wait = (random.random())**5*9+1 #停1~9秒 指数越高平均间隔越短
+		wait = (random.random())**5*5+1 #停1~9秒 指数越高平均间隔越短
 		print('---\nWait %.3f s...'%wait)
 		time.sleep(wait)
 		print('Continue!')
